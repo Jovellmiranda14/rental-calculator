@@ -2,7 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>Rental POS Calculator</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
@@ -12,10 +15,15 @@
       body {
         background: #e0e0e0;
         font-family: "Segoe UI", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
       }
       .calculator {
+        width: 100%;
         max-width: 360px;
-        margin: 40px auto;
         background: #222;
         border-radius: 15px;
         padding: 20px;
@@ -29,7 +37,7 @@
         font-size: 20px;
         text-align: right;
         margin-bottom: 15px;
-        min-height: 120px;
+        min-height: 140px;
         box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.5);
       }
       .display-box div {
@@ -40,27 +48,27 @@
       .btn-time,
       .btn-num,
       .btn-equal,
-      .btn-reset {
+      .btn-reset,
+      .btn-back {
         font-size: 18px;
         padding: 15px 0;
         border-radius: 10px;
         border: none;
         transition: 0.2s;
+        font-weight: bold;
+        touch-action: manipulation;
       }
       .btn-equal {
         background-color: #28a745;
         color: #fff;
-        font-weight: bold;
       }
       .btn-reset {
         background-color: #dc3545;
         color: #fff;
-        font-weight: bold;
       }
       .btn-primary {
         background-color: #007bff;
         color: #fff;
-        font-weight: bold;
       }
       .btn-num {
         background-color: #444;
@@ -84,7 +92,7 @@
         </div>
         <div>Total: ₱<span id="total">0</span></div>
         <div style="color: #00ff00">
-          Amount Paid: ₱<span id="cash-display">0</span>
+          Paid: ₱<span id="cash-display">0</span>
         </div>
         <div style="font-weight: bold; color: #ffc107">
           Change: ₱<span id="change">0</span>
@@ -114,7 +122,7 @@
             class="btn btn-secondary w-100 btn-time"
             onclick="resetCalc()"
           >
-            Clear All
+            Reset
           </button>
         </div>
       </div>
@@ -160,15 +168,23 @@
           <button class="btn btn-num w-100" onclick="addCash('.')">.</button>
         </div>
         <div class="col-4">
-          <button class="btn btn-reset w-100" onclick="resetCash()">C</button>
+          <button
+            class="btn btn-secondary w-100 btn-back"
+            onclick="backspace()"
+          >
+            ⌫
+          </button>
         </div>
       </div>
 
       <div class="row g-2">
-        <div class="col-12">
+        <div class="col-8">
           <button class="btn btn-equal w-100" onclick="calculate()">
             GET CHANGE (=)
           </button>
+        </div>
+        <div class="col-4">
+          <button class="btn btn-reset w-100" onclick="resetCash()">C</button>
         </div>
       </div>
     </div>
@@ -178,7 +194,7 @@
       let totalAmount = 0;
       let cashInput = "";
 
-      // Rates: Update these to your actual pricing
+      // Rates configuration
       const rates = { 20: 50, 30: 75, 60: 150 };
 
       function addTime(mins) {
@@ -188,8 +204,17 @@
       }
 
       function addCash(num) {
+        // Prevent multiple decimals
         if (num === "." && cashInput.includes(".")) return;
+        // Limit input length
+        if (cashInput.length > 8) return;
+
         cashInput += num;
+        document.getElementById("cash-display").innerText = cashInput;
+      }
+
+      function backspace() {
+        cashInput = cashInput.slice(0, -1);
         document.getElementById("cash-display").innerText = cashInput || "0";
       }
 
@@ -209,8 +234,9 @@
         let change = cash - totalAmount;
 
         if (cash < totalAmount && cash > 0) {
-          alert("Short on cash!");
-          document.getElementById("change").innerText = "Error";
+          document.getElementById("change").innerText = "Short!";
+        } else if (totalAmount === 0) {
+          document.getElementById("change").innerText = "0";
         } else {
           document.getElementById("change").innerText = change.toFixed(2);
         }
