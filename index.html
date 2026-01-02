@@ -274,6 +274,9 @@
     </div>
 
     <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("./sw.js");
+      }
       const $ = (id) => document.getElementById(id);
 
       let totalMins = 0;
@@ -352,7 +355,16 @@
             $("bill-list").scrollTop = $("bill-list").scrollHeight;
           }, 10);
         }
+
+        const sessionData = {
+          totalMins,
+          totalAmount,
+          items,
+          cashInput,
+        };
+        localStorage.setItem("rentalSession", JSON.stringify(sessionData));
       }
+
       function calculate() {
         let cash = parseFloat(cashInput) || 0;
         let change = cash - totalAmount;
@@ -371,6 +383,21 @@
         updateDisplay();
         resetCash();
       }
+
+      window.onload = function () {
+        const savedData = localStorage.getItem("rentalSession");
+        if (savedData) {
+          const data = JSON.parse(savedData);
+          totalMins = data.totalMins;
+          totalAmount = data.totalAmount;
+          items = data.items;
+          cashInput = data.cashInput || "";
+
+          // Update the screen with saved values
+          $("cash-display").innerText = cashInput || "0";
+          updateDisplay();
+        }
+      };
     </script>
   </body>
 </html>
