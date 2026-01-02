@@ -1,90 +1,228 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rental Calculator</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Rental POS Calculator</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #e0e0e0;
+        font-family: "Segoe UI", sans-serif;
+      }
+      .calculator {
+        max-width: 360px;
+        margin: 40px auto;
+        background: #222;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        color: #fff;
+      }
+      .display-box {
+        background: #333;
+        border-radius: 10px;
+        padding: 15px;
+        font-size: 20px;
+        text-align: right;
+        margin-bottom: 15px;
+        min-height: 120px;
+        box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.5);
+      }
+      .display-box div {
+        margin-bottom: 2px;
+        border-bottom: 1px solid #444;
+        padding: 2px 0;
+      }
+      .btn-time,
+      .btn-num,
+      .btn-equal,
+      .btn-reset {
+        font-size: 18px;
+        padding: 15px 0;
+        border-radius: 10px;
+        border: none;
+        transition: 0.2s;
+      }
+      .btn-equal {
+        background-color: #28a745;
+        color: #fff;
+        font-weight: bold;
+      }
+      .btn-reset {
+        background-color: #dc3545;
+        color: #fff;
+        font-weight: bold;
+      }
+      .btn-primary {
+        background-color: #007bff;
+        color: #fff;
+        font-weight: bold;
+      }
+      .btn-num {
+        background-color: #444;
+        color: #fff;
+      }
+      .btn-secondary {
+        background-color: #6c757d;
+        color: #fff;
+      }
+      button:active {
+        transform: scale(0.95);
+        opacity: 0.8;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="calculator">
+      <div class="display-box">
+        <div style="font-size: 0.8em; color: #aaa">
+          Mins: <span id="time">0</span>
+        </div>
+        <div>Total: ₱<span id="total">0</span></div>
+        <div style="color: #00ff00">
+          Amount Paid: ₱<span id="cash-display">0</span>
+        </div>
+        <div style="font-weight: bold; color: #ffc107">
+          Change: ₱<span id="change">0</span>
+        </div>
+      </div>
 
-<!-- Bootstrap CSS CDN -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
-
-<style>
-.display {
-    background: #f8f9fa;
-    padding: 15px;
-    border-radius: 12px;
-    font-size: 20px;
-    font-weight: bold;
-    text-align: center;
-    margin-top: 15px;
-}
-.btn-time {
-    font-size: 18px;
-    padding: 20px 0;
-}
-</style>
-</head>
-<body class="bg-light">
-
-<div class="container py-4">
-
-    <h2 class="text-center mb-3">Rental Calculator</h2>
-
-    <div class="row g-2 mb-3">
+      <div class="row g-2 mb-2">
         <div class="col-6">
-            <button class="btn btn-primary w-100 btn-time" onclick="addTime(20)">20 mins</button>
+          <button class="btn btn-primary w-100 btn-time" onclick="addTime(20)">
+            20m / ₱50
+          </button>
         </div>
         <div class="col-6">
-            <button class="btn btn-primary w-100 btn-time" onclick="addTime(30)">30 mins</button>
+          <button class="btn btn-primary w-100 btn-time" onclick="addTime(30)">
+            30m / ₱75
+          </button>
+        </div>
+      </div>
+      <div class="row g-2 mb-3">
+        <div class="col-6">
+          <button class="btn btn-primary w-100 btn-time" onclick="addTime(60)">
+            1h / ₱150
+          </button>
         </div>
         <div class="col-6">
-            <button class="btn btn-primary w-100 btn-time" onclick="addTime(40)">40 mins</button>
+          <button
+            class="btn btn-secondary w-100 btn-time"
+            onclick="resetCalc()"
+          >
+            Clear All
+          </button>
         </div>
-        <div class="col-6">
-            <button class="btn btn-primary w-100 btn-time" onclick="addTime(60)">1 Hour</button>
+      </div>
+
+      <div class="row g-2 mb-2">
+        <div class="col-4">
+          <button class="btn btn-num w-100" onclick="addCash('1')">1</button>
         </div>
+        <div class="col-4">
+          <button class="btn btn-num w-100" onclick="addCash('2')">2</button>
+        </div>
+        <div class="col-4">
+          <button class="btn btn-num w-100" onclick="addCash('3')">3</button>
+        </div>
+      </div>
+      <div class="row g-2 mb-2">
+        <div class="col-4">
+          <button class="btn btn-num w-100" onclick="addCash('4')">4</button>
+        </div>
+        <div class="col-4">
+          <button class="btn btn-num w-100" onclick="addCash('5')">5</button>
+        </div>
+        <div class="col-4">
+          <button class="btn btn-num w-100" onclick="addCash('6')">6</button>
+        </div>
+      </div>
+      <div class="row g-2 mb-2">
+        <div class="col-4">
+          <button class="btn btn-num w-100" onclick="addCash('7')">7</button>
+        </div>
+        <div class="col-4">
+          <button class="btn btn-num w-100" onclick="addCash('8')">8</button>
+        </div>
+        <div class="col-4">
+          <button class="btn btn-num w-100" onclick="addCash('9')">9</button>
+        </div>
+      </div>
+      <div class="row g-2 mb-3">
+        <div class="col-4">
+          <button class="btn btn-num w-100" onclick="addCash('0')">0</button>
+        </div>
+        <div class="col-4">
+          <button class="btn btn-num w-100" onclick="addCash('.')">.</button>
+        </div>
+        <div class="col-4">
+          <button class="btn btn-reset w-100" onclick="resetCash()">C</button>
+        </div>
+      </div>
+
+      <div class="row g-2">
+        <div class="col-12">
+          <button class="btn btn-equal w-100" onclick="calculate()">
+            GET CHANGE (=)
+          </button>
+        </div>
+      </div>
     </div>
 
-    <div class="row g-2 mb-3">
-        <div class="col-6">
-            <button class="btn btn-success w-100 btn-time" onclick="calculate()">=</button>
-        </div>
-        <div class="col-6">
-            <button class="btn btn-danger w-100 btn-time" onclick="resetCalc()">Reset</button>
-        </div>
-    </div>
+    <script>
+      let totalMins = 0;
+      let totalAmount = 0;
+      let cashInput = "";
 
-    <div class="display">
-        Total Time: <span id="time">0</span> mins<br>
-        Total Amount: ₱<span id="total">0</span>
-    </div>
+      // Rates: Update these to your actual pricing
+      const rates = { 20: 50, 30: 75, 60: 150 };
 
-</div>
+      function addTime(mins) {
+        totalMins += mins;
+        totalAmount += rates[mins];
+        updateDisplay();
+      }
 
-<!-- Bootstrap JS CDN (optional) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+      function addCash(num) {
+        if (num === "." && cashInput.includes(".")) return;
+        cashInput += num;
+        document.getElementById("cash-display").innerText = cashInput || "0";
+      }
 
-<script>
-let rentals = [];
-const rates = { 20:100, 30:50, 40:150, 60:200 };
+      function resetCash() {
+        cashInput = "";
+        document.getElementById("cash-display").innerText = "0";
+        document.getElementById("change").innerText = "0";
+      }
 
-function addTime(mins) {
-    rentals.push(mins);
-}
+      function updateDisplay() {
+        document.getElementById("time").innerText = totalMins;
+        document.getElementById("total").innerText = totalAmount;
+      }
 
-function calculate() {
-    let totalMins = 0, totalAmount = 0;
-    rentals.forEach(m => { totalMins += m; totalAmount += rates[m]; });
-    document.getElementById("time").innerText = totalMins;
-    document.getElementById("total").innerText = totalAmount;
-}
+      function calculate() {
+        let cash = parseFloat(cashInput) || 0;
+        let change = cash - totalAmount;
 
-function resetCalc() {
-    rentals = [];
-    document.getElementById("time").innerText = 0;
-    document.getElementById("total").innerText = 0;
-}
-</script>
+        if (cash < totalAmount && cash > 0) {
+          alert("Short on cash!");
+          document.getElementById("change").innerText = "Error";
+        } else {
+          document.getElementById("change").innerText = change.toFixed(2);
+        }
+      }
 
-</body>
+      function resetCalc() {
+        totalMins = 0;
+        totalAmount = 0;
+        cashInput = "";
+        updateDisplay();
+        resetCash();
+      }
+    </script>
+  </body>
 </html>
