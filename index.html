@@ -20,7 +20,7 @@
         align-items: center;
         min-height: 100vh;
         margin: 0;
-        overflow: hidden;
+        /* overflow: hidden; */
       }
       .calculator {
         width: 100%;
@@ -305,8 +305,8 @@
         $("v-name").innerText = type;
 
         // Update Time Button Labels with new prices
-        $("t20").innerText = `20m / ₱${pricing[type][20]}`;
-        $("t30").innerText = `30m / ₱${pricing[type][30]}`;
+        $("t20").innerText = `20mins / ₱${pricing[type][20]}`;
+        $("t30").innerText = `30mins / ₱${pricing[type][30]}`;
         $("t60").innerText = `1hr / ₱${pricing[type][60]}`;
 
         // resetCalc();
