@@ -7,6 +7,7 @@ body {
   align-items: center;
   background: #e0e0e0;
   height: 95vh;
+    border-radius: 10px;
 }
 .box {
   background: #222;
