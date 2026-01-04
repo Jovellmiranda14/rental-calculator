@@ -1,47 +1,39 @@
-// 1. ALWAYS change this version (v1 to v2, etc.) when you update your code
-const CACHE_NAME = 'rental-time-tracker-v3';
+const CACHE_NAME = 'rental-time-tracker-v4';
 
 const ASSETS = [
     './',
     './index.html',
-    './app.js', // Added your script to the cache
+    './app.js',
+    './style.css',
     'https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css'
 ];
 
-// Install Service Worker
+// Install
 self.addEventListener('install', (e) => {
-    // Forces the new Service Worker to become the active one immediately
     self.skipWaiting();
     e.waitUntil(
-        caches.open(CACHE_NAME).then((cache) => {
-            console.log('Caching new assets');
-            return cache.addAll(ASSETS);
-        })
+        caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
     );
 });
 
-// NEW: Activate Event (This deletes the OLD cache)
+// Activate (delete old cache + take control)
 self.addEventListener('activate', (e) => {
     e.waitUntil(
-        caches.keys().then((cacheNames) => {
-            return Promise.all(
-                cacheNames.map((existingCacheName) => {
-                    // If the cache name isn't the current one, delete it
-                    if (existingCacheName !== CACHE_NAME) {
-                        console.log('Deleting old cache:', existingCacheName);
-                        return caches.delete(existingCacheName);
+        caches.keys().then(cacheNames =>
+            Promise.all(
+                cacheNames.map(name => {
+                    if (name !== CACHE_NAME) {
+                        return caches.delete(name);
                     }
                 })
-            );
-        })
+            )
+        ).then(() => self.clients.claim())
     );
 });
 
-// Fetch Assets from Cache
+// Fetch
 self.addEventListener('fetch', (e) => {
     e.respondWith(
-        caches.match(e.request).then((res) => {
-            return res || fetch(e.request);
-        })
+        caches.match(e.request).then(res => res || fetch(e.request))
     );
 });
