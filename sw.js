@@ -1,4 +1,4 @@
-const CACHE_NAME = 'rental-time-tracker-v4';
+const CACHE_NAME = 'rental-time-tracker-v5';
 
 const ASSETS = [
     './',
