@@ -1,0 +1,47 @@
+body {
+  margin: 0;
+  background: #222;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* Full screen calculator */
+.box {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column; /* 👈 stack display + buttons */
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+/* Display stays at top */
+.display {
+  background: #333;
+  border-radius: 10px;
+  padding: 15px;
+  min-height: 140px;
+  margin-bottom: 12px;
+  color:white;
+}
+
+/* Button area fills remaining space */
+.buttons {
+  flex: 1; /* 👈 takes ALL remaining height */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Rows stretch evenly */
+.buttons .row {
+  flex: 1;
+}
+
+/* Buttons stretch vertically */
+.btn-time {
+  height: 100%; /* 👈 FULL HEIGHT BUTTONS */
+  font-size: 18px;
+  color:white;
+  font-weight: bold;
+  border-radius: 10px;
+}

@@ -2,403 +2,77 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
-    <title>Rental POS Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rental Time Tracker</title>
+
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-    <style>
-      body {
-        background: #e0e0e0;
-        font-family: "Segoe UI", sans-serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-        margin: 0;
-      }
-      .calculator {
-        margin-top: -18px;
-        width: 100%;
-        max-width: 380px;
-        background: #222;
-        border-radius: 15px;
-        padding: 16px;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-        color: #fff;
-        height: 100%;
-      }
-      .display-box {
-        background: #333;
-        border-radius: 2px;
-        padding: 12px;
-        font-size: 18.9px;
-        text-align: left;
-        margin-bottom: 8px;
-        min-height: 120px;
-        box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.5);
-      }
-      .display-box div {
-        margin-bottom: 1px;
-        border-bottom: 1px solid #444;
-        padding: 1px 0;
-      }
-      .vehicle-type {
-        background: #444;
-        border: 2px solid transparent;
-        color: #aaa;
-        transition: 0.3s;
-        font-weight: bold;
-        padding: 6px 0;
-        border-radius: 10px;
-        touch-action: manipulation;
-      }
-      .vehicle-type.active {
-        background: #007bff;
-        color: #fff;
-        border-color: #fff;
-      }
-      .btn-time,
-      .btn-num,
-      .btn-equal,
-      .btn-reset,
-      .btn-back {
-        font-size: 18px;
-        padding: 12px 0;
-        border-radius: 10px;
-        border: none;
-        transition: 0.2s;
-        font-weight: bold;
-        touch-action: manipulation;
-      }
-      .btn-equal {
-        background-color: #28a745;
-        color: #fff;
-      }
-      .btn-reset {
-        background-color: #dc3545;
-        color: #fff;
-      }
-      .btn-primary {
-        background-color: #007bff;
-        color: #fff;
-      }
-      .btn-num {
-        background-color: #444;
-        color: #fff;
-      }
-      .btn-secondary {
-        background-color: #6c757d;
-        color: #fff;
-      }
-      button:active {
-        transform: scale(0.95);
-        opacity: 0.8;
-      }
-    </style>
+    <link href="style.css" rel="stylesheet" />
   </head>
   <body>
-    <div class="calculator">
-      <div class="row g-2 mb-3">
-        <div class="col-4">
-          <button
-            id="btn-bike"
-            class="btn w-100 vehicle-type active"
-            onclick="setVehicle('bike')"
-          >
-            BIKE
-          </button>
-        </div>
-        <div class="col-4">
-          <button
-            id="btn-motor"
-            class="btn w-100 vehicle-type"
-            onclick="setVehicle('motor')"
-          >
-            MOTOR
-          </button>
-        </div>
-        <div class="col-4">
-          <button
-            id="btn-car"
-            class="btn w-100 vehicle-type"
-            onclick="setVehicle('car')"
-          >
-            CAR
-          </button>
-        </div>
+    <div class="box">
+      <div class="display">
+        <div>📍 Philippine Time</div>
+        <h4 id="currentTime">--:--</h4>
+
+        <hr style="border-color: #555" />
+
+        <div>⏰ End Time</div>
+        <h3 id="endTime">--:--</h3>
+
+        <hr style="border-color: #555" />
+
+        <div>➕ Time Added</div>
+        <h5 id="addedTime">0 mins</h5>
       </div>
 
-      <div class="display-box">
-        <div
-          style="
-            font-size: 0.7em;
-            color: #aaa;
-            border-bottom: 1px dashed #555;
-            margin-bottom: 5px;
-          "
-        >
-          ITEMS:
+      <!-- 👇 BUTTON CONTAINER -->
+      <div class="buttons">
+        <div class="row g-2">
+          <div class="col-6">
+            <button
+              class="btn btn-primary w-100 btn-time"
+              onclick="addMinutes(10)"
+            >
+              +10 mins
+            </button>
+          </div>
+          <div class="col-6">
+            <button
+              class="btn btn-primary w-100 btn-time"
+              onclick="addMinutes(15)"
+            >
+              +15 mins
+            </button>
+          </div>
         </div>
 
-        <div
-          id="bill-list"
-          style="
-            font-size: 0.8em;
-            color: #00d4ff;
-            max-height: 50px;
-            overflow-y: auto;
-            margin-bottom: 10px;
-          "
-        >
-          <i>No items added...</i>
-        </div>
-
-        <div style="font-size: 0.8em; color: #aaa">
-          Vehicle: <span id="v-name" class="text-uppercase">bike</span> | Mins:
-          <span id="time">0</span>
-        </div>
-
-        <div>Total: ₱<span id="total">0</span></div>
-
-        <div style="color: #00ff00">
-          Amount Paid: ₱<span id="cash-display">0</span>
-        </div>
-
-        <div style="font-weight: bold; color: #ffc107">
-          Change: ₱<span id="change">0</span>
-        </div>
-      </div>
-      <div class="row g-2 mb-2">
-        <div class="col-6">
-          <button
-            id="t20"
-            class="btn btn-primary w-100 btn-time"
-            onclick="addTime(20)"
-          >
-            20mins / ₱20
-          </button>
-        </div>
-        <div class="col-6">
-          <button
-            id="t30"
-            class="btn btn-primary w-100 btn-time"
-            onclick="addTime(30)"
-          >
-            30mins / ₱30
-          </button>
-        </div>
-      </div>
-      <div class="row g-2 mb-3">
-        <div class="col-6">
-          <button
-            id="t60"
-            class="btn btn-primary w-100 btn-time"
-            onclick="addTime(60)"
-          >
-            1hr / ₱50
-          </button>
-        </div>
-        <div class="col-6">
-          <button
-            class="btn btn-secondary w-100 btn-time"
-            onclick="resetCalc()"
-          >
-            Reset
-          </button>
-        </div>
-      </div>
-
-      <div class="row g-2 mb-2">
-        <div class="col-4">
-          <button class="btn btn-num w-100" onclick="addCash('1')">1</button>
-        </div>
-        <div class="col-4">
-          <button class="btn btn-num w-100" onclick="addCash('2')">2</button>
-        </div>
-        <div class="col-4">
-          <button class="btn btn-num w-100" onclick="addCash('3')">3</button>
-        </div>
-      </div>
-      <div class="row g-2 mb-2">
-        <div class="col-4">
-          <button class="btn btn-num w-100" onclick="addCash('4')">4</button>
-        </div>
-        <div class="col-4">
-          <button class="btn btn-num w-100" onclick="addCash('5')">5</button>
-        </div>
-        <div class="col-4">
-          <button class="btn btn-num w-100" onclick="addCash('6')">6</button>
-        </div>
-      </div>
-      <div class="row g-2 mb-2">
-        <div class="col-4">
-          <button class="btn btn-num w-100" onclick="addCash('7')">7</button>
-        </div>
-        <div class="col-4">
-          <button class="btn btn-num w-100" onclick="addCash('8')">8</button>
-        </div>
-        <div class="col-4">
-          <button class="btn btn-num w-100" onclick="addCash('9')">9</button>
-        </div>
-      </div>
-      <div class="row g-2 mb-3">
-        <div class="col-4">
-          <button class="btn btn-num w-100" onclick="addCash('0')">0</button>
-        </div>
-        <div class="col-4">
-          <button class="btn btn-num w-100" onclick="addCash('.')">.</button>
-        </div>
-        <div class="col-4">
-          <button
-            class="btn btn-secondary w-100 btn-back"
-            onclick="backspace()"
-          >
-            ⌫
-          </button>
-        </div>
-      </div>
-
-      <div class="row g-2">
-        <div class="col-8">
-          <button class="btn btn-equal w-100" onclick="calculate()">
-            GET CHANGE (=)
-          </button>
-        </div>
-        <div class="col-4">
-          <button class="btn btn-reset w-100" onclick="resetCash()">C</button>
+        <div class="row g-2">
+          <div class="col-6">
+            <button
+              class="btn btn-primary w-100 btn-time"
+              onclick="addMinutes(20)"
+            >
+              +20 mins
+            </button>
+          </div>
+          <div class="col-6">
+            <button class="btn btn-danger w-100 btn-time" onclick="resetTime()">
+              RESET
+            </button>
+          </div>
         </div>
       </div>
     </div>
 
+    <script src="app.js"></script>
     <script>
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker.register("./sw.js");
       }
-      const $ = (id) => document.getElementById(id);
-
-      let totalMins = 0;
-      let totalAmount = 0;
-      let cashInput = "";
-      let currentVehicle = "bike";
-      let items = [];
-
-      // Rates Configuration
-      const pricing = {
-        bike: { 20: 20, 30: 30, 60: 50 },
-        motor: { 20: 40, 30: 60, 60: 100 },
-        car: { 20: 60, 30: 90, 60: 150 },
-      };
-
-      function setVehicle(type) {
-        currentVehicle = type;
-
-        document
-          .querySelectorAll(".vehicle-type")
-          .forEach((btn) => btn.classList.remove("active"));
-        $(`btn-${type}`).classList.add("active");
-
-        // Update Display Name
-        $("v-name").innerText = type;
-
-        // Update Time Button Labels with new prices
-        $("t20").innerText = `20mins / ₱${pricing[type][20]}`;
-        $("t30").innerText = `30mins / ₱${pricing[type][30]}`;
-        $("t60").innerText = `1hr / ₱${pricing[type][60]}`;
-
-        // resetCalc();
-      }
-
-      function addTime(mins) {
-        const price = pricing[currentVehicle][mins];
-        totalMins += mins;
-        totalAmount += price;
-
-        // Create a label (e.g., BIKE 30m)
-        const label = mins >= 60 ? "1hr" : mins + "mins";
-        items.push(`${currentVehicle.toUpperCase()} ${label}: ₱${price}`);
-
-        updateDisplay();
-      }
-
-      function addCash(num) {
-        if (num === "." && cashInput.includes(".")) return;
-        if (cashInput.length > 8) return;
-        cashInput += num;
-        $("cash-display").innerText = cashInput;
-      }
-
-      function backspace() {
-        cashInput = cashInput.slice(0, -1);
-        $("cash-display").innerText = cashInput || "0";
-      }
-
-      function resetCash() {
-        cashInput = "";
-        $("cash-display").innerText = "0";
-        $("change").innerText = "0";
-      }
-
-      function updateDisplay() {
-        $("time").innerText = totalMins;
-        $("total").innerText = totalAmount;
-
-        if (items.length === 0) {
-          $("bill-list").innerHTML = "<i>No items added...</i>";
-        } else {
-          $("bill-list").innerHTML = items.join("<br>");
-
-          // Smooth scroll to bottom
-          setTimeout(() => {
-            $("bill-list").scrollTop = $("bill-list").scrollHeight;
-          }, 10);
-        }
-
-        const sessionData = {
-          totalMins,
-          totalAmount,
-          items,
-          cashInput,
-        };
-        localStorage.setItem("rentalSession", JSON.stringify(sessionData));
-      }
-
-      function calculate() {
-        let cash = parseFloat(cashInput) || 0;
-        let change = cash - totalAmount;
-        if (cash < totalAmount && cash > 0) {
-          $("change").innerText = "Short!";
-        } else {
-          $("change").innerText = change.toFixed(2);
-        }
-      }
-
-      function resetCalc() {
-        totalMins = 0;
-        totalAmount = 0;
-        cashInput = "";
-        items = []; // CRITICAL: This clears the "scrolled" items
-        updateDisplay();
-        resetCash();
-      }
-      window.onload = function () {
-        const savedData = localStorage.getItem("rentalSession");
-        if (savedData) {
-          const data = JSON.parse(savedData);
-          totalMins = data.totalMins;
-          totalAmount = data.totalAmount;
-          items = data.items;
-          cashInput = data.cashInput || "";
-
-          // Update the screen with saved values
-          $("cash-display").innerText = cashInput || "0";
-          updateDisplay();
-        }
-      };
     </script>
+    <script src="sw.js"></script>
   </body>
 </html>
