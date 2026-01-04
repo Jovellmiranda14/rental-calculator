@@ -7,7 +7,7 @@ body {
   align-items: center;
   background: #e0e0e0;
   height: 95vh;
-    border-radius: 10px;
+  border-radius: 10px;
 }
 .box {
   background: #222;
@@ -19,7 +19,25 @@ body {
   padding: 11px;
   box-sizing: border-box;
 }
-
+.tracker-container {
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+.calculator-container {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+.cal-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex-grow: 1; /* lets it expand to fill available space */
+  width: 100%; /* full width */
+  box-sizing: border-box; /* ensures padding doesn't break layout */
+}
 /* Display stays at top */
 .display {
   background: #333;
@@ -36,7 +54,6 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  
 }
 
 /* Rows stretch evenly */

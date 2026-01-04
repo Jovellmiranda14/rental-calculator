@@ -13,53 +13,194 @@
   </head>
   <body>
     <div class="box">
-      <div class="display">
-        <div>📍 Philippine Time</div>
-        <h4 id="currentTime">--:--</h4>
+      <!-- NAV TABS -->
+      <ul class="nav nav-tabs mb-3" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link active"
+            id="tracker-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#tracker"
+            type="button"
+            role="tab"
+          >
+            ⏱ Tracker
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="calculator-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#calculator"
+            type="button"
+            role="tab"
+          >
+            🧮 Calculator
+          </button>
+        </li>
+      </ul>
 
-        <hr style="border-color: #555" />
+      <div class="tracker-container" id="tracker-container">
+        <div class="display">
+          <div>📍 Philippine Time</div>
+          <h4 id="currentTime">--:--</h4>
 
-        <div>⏰ End Time</div>
-        <h3 id="endTime">--:--</h3>
+          <hr style="border-color: #555" />
 
-        <hr style="border-color: #555" />
+          <div>⏰ End Time</div>
+          <h3 id="endTime">--:--</h3>
 
-        <div>➕ Time Added</div>
-        <h5 id="addedTime">0 mins</h5>
+          <hr style="border-color: #555" />
+
+          <div>➕ Time Added</div>
+          <h5 id="addedTime">0 mins</h5>
+        </div>
+
+        <!-- BUTTONS -->
+        <div class="buttons">
+          <div class="row g-2">
+            <div class="col-6">
+              <button
+                class="btn btn-primary w-100 btn-time"
+                onclick="addMinutes(10)"
+              >
+                +10 mins
+              </button>
+            </div>
+            <div class="col-6">
+              <button
+                class="btn btn-primary w-100 btn-time"
+                onclick="addMinutes(15)"
+              >
+                +15 mins
+              </button>
+            </div>
+          </div>
+
+          <div class="row g-2">
+            <div class="col-6">
+              <button
+                class="btn btn-primary w-100 btn-time"
+                onclick="addMinutes(20)"
+              >
+                +20 mins
+              </button>
+            </div>
+            <div class="col-6">
+              <button
+                class="btn btn-danger w-100 btn-time"
+                onclick="resetTime()"
+              >
+                RESET
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- 👇 BUTTON CONTAINER -->
-      <div class="buttons">
-        <div class="row g-2">
-          <div class="col-6">
-            <button
-              class="btn btn-primary w-100 btn-time"
-              onclick="addMinutes(10)"
-            >
-              +10 mins
+      <!-- CALCULATOR TAB -->
+      <div id="calculator" class="d-none calculator-container">
+        <div class="display mb-3">
+          <!-- Current Philippine Time -->
+          <div>📍 Philippine Time</div>
+          <h4 id="currentTimeCalc">--:--</h4>
+
+          <hr style="border-color: #555" />
+
+          <!-- Input for time used -->
+          <div>⏳ Set Time (HH:MM AM/PM)</div>
+          <input
+            type="text"
+            id="usedTimeInput"
+            class="form-control"
+            placeholder="HH:MM"
+          />
+          <!-- Result -->
+          <h5>Remaining Time: <span id="remainingTime">--:--</span></h5>
+        </div>
+
+        <!-- Calculator Buttons -->
+        <div class="row g-2 mb-2">
+          <div class="col-3">
+            <button class="btn btn-secondary w-100" onclick="appendNumber('7')">
+              7
             </button>
           </div>
-          <div class="col-6">
-            <button
-              class="btn btn-primary w-100 btn-time"
-              onclick="addMinutes(15)"
-            >
-              +15 mins
+          <div class="col-3">
+            <button class="btn btn-secondary w-100" onclick="appendNumber('8')">
+              8
+            </button>
+          </div>
+          <div class="col-3">
+            <button class="btn btn-secondary w-100" onclick="appendNumber('9')">
+              9
+            </button>
+          </div>
+          <div class="col-3">
+            <button class="btn btn-danger w-100" onclick="clearInput()">
+              C
             </button>
           </div>
         </div>
 
-        <div class="row g-2">
-          <div class="col-6">
+        <div class="row g-2 mb-2">
+          <div class="col-3">
+            <button class="btn btn-secondary w-100" onclick="appendNumber('4')">
+              4
+            </button>
+          </div>
+          <div class="col-3">
+            <button class="btn btn-secondary w-100" onclick="appendNumber('5')">
+              5
+            </button>
+          </div>
+          <div class="col-3">
+            <button class="btn btn-secondary w-100" onclick="appendNumber('6')">
+              6
+            </button>
+          </div>
+          <div class="col-3">
+            <button class="btn btn-warning w-100" onclick="backspace()">
+              ⌫
+            </button>
+          </div>
+        </div>
+
+        <div class="row g-2 mb-2">
+          <div class="col-3">
+            <button class="btn btn-secondary w-100" onclick="appendNumber('1')">
+              1
+            </button>
+          </div>
+          <div class="col-3">
+            <button class="btn btn-secondary w-100" onclick="appendNumber('2')">
+              2
+            </button>
+          </div>
+          <div class="col-3">
+            <button class="btn btn-secondary w-100" onclick="appendNumber('3')">
+              3
+            </button>
+          </div>
+          <div class="col-3">
             <button
-              class="btn btn-primary w-100 btn-time"
-              onclick="addMinutes(20)"
+              class="btn btn-primary w-100"
+              onclick="calculateRemaining()"
             >
-              +20 mins
+              =
+            </button>
+          </div>
+        </div>
+
+        <div class="row g-2 mb-2">
+          <div class="col-6">
+            <button class="btn btn-secondary w-100" onclick="appendNumber('0')">
+              0
             </button>
           </div>
           <div class="col-6">
-            <button class="btn btn-danger w-100 btn-time" onclick="resetTime()">
+            <button class="btn btn-danger w-100" onclick="resetCalculator()">
               RESET
             </button>
           </div>
@@ -67,6 +208,7 @@
       </div>
     </div>
 
+    <!-- Scripts -->
     <script src="app.js"></script>
     <script>
       if ("serviceWorker" in navigator) {
