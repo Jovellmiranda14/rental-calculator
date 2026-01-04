@@ -1,10 +1,10 @@
-const CACHE_NAME = 'rental-time-tracker-v5';
+const CACHE_NAME = 'rental-time-tracker-v5' + Date.now();
 
 const ASSETS = [
     './',
-    './index.html',
-    './app.js',
-    './style.css',
+    '.index.html',
+    '.app.js',
+    '.style.css',
     'https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css'
 ];
 
@@ -19,15 +19,18 @@ self.addEventListener('install', (e) => {
 // Activate (delete old cache + take control)
 self.addEventListener('activate', (e) => {
     e.waitUntil(
-        caches.keys().then(cacheNames =>
-            Promise.all(
-                cacheNames.map(name => {
+        (async () => {
+            const cacheNames = await caches.keys();
+            await Promise.all(
+                cacheNames.map((name) => {
                     if (name !== CACHE_NAME) {
+                        console.log('Deleting old cache:', name);
                         return caches.delete(name);
                     }
                 })
-            )
-        ).then(() => self.clients.claim())
+            );
+            await self.clients.claim();
+        })()
     );
 });
 
