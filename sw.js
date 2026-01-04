@@ -1,5 +1,5 @@
 // 1. ALWAYS change this version (v1 to v2, etc.) when you update your code
-const CACHE_NAME = 'rental-time-tracker-v2';
+const CACHE_NAME = 'rental-time-tracker-v3';
 
 const ASSETS = [
     './',

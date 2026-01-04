@@ -1,16 +1,21 @@
 body {
   margin: 0;
-  background: #222;
+  padding-top: 10px;
   font-family: "Segoe UI", sans-serif;
-}
-
-/* Full screen calculator */
-.box {
-  width: 100vw;
-  height: 100vh;
   display: flex;
-  flex-direction: column; /* 👈 stack display + buttons */
-  padding: 16px;
+  justify-content: center;
+  align-items: center;
+  background: #e0e0e0;
+  height: 95vh;
+}
+.box {
+  background: #222;
+  width: 100%;
+  max-width: 380px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 11px;
   box-sizing: border-box;
 }
 
@@ -21,15 +26,16 @@ body {
   padding: 15px;
   min-height: 140px;
   margin-bottom: 12px;
-  color:white;
+  color: white;
 }
 
 /* Button area fills remaining space */
 .buttons {
-  flex: 1; /* 👈 takes ALL remaining height */
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  
 }
 
 /* Rows stretch evenly */
@@ -39,9 +45,8 @@ body {
 
 /* Buttons stretch vertically */
 .btn-time {
-  height: 100%; /* 👈 FULL HEIGHT BUTTONS */
+  height: 100%;
   font-size: 18px;
-  color:white;
   font-weight: bold;
   border-radius: 10px;
 }
