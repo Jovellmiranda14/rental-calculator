@@ -1,4 +1,4 @@
-const CACHE_NAME = 'rental-time-tracker-v5' + Date.now();
+const CACHE_NAME = 'rental-time-tracker-v6' + Date.now();
 
 // List of assets to cache for offline use
 const ASSETS = [

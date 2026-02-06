@@ -184,3 +184,54 @@ function backspace() {
 function clearInput() {
     usedTimeInput.value = "";
 }
+
+// Global variable for Money Calculator
+let moneyExpression = "";
+
+function moneyNum(num) {
+    moneyExpression += num;
+    updateMoneyDisplay();
+}
+
+function moneyOp(op) {
+    if (moneyExpression === "" && op !== "-") return;
+    const last = moneyExpression.slice(-1);
+    if (["+", "-", "*", "/"].includes(last)) {
+        moneyExpression = moneyExpression.slice(0, -1);
+    }
+    moneyExpression += op;
+    updateMoneyDisplay();
+}
+
+function moneyQuickAdd(val) {
+    if (moneyExpression !== "" && !isNaN(moneyExpression.slice(-1))) {
+        moneyExpression += "+";
+    }
+    moneyExpression += val;
+    updateMoneyDisplay();
+}
+
+function moneyClear() {
+    moneyExpression = "";
+    document.getElementById('moneyHistory').innerText = "";
+    updateMoneyDisplay("0");
+}
+
+function moneyEqual() {
+    try {
+        if (moneyExpression === "") return;
+        const result = eval(moneyExpression);
+        document.getElementById('moneyHistory').innerText = moneyExpression + " =";
+        moneyExpression = result.toString();
+        updateMoneyDisplay();
+    } catch (e) {
+        updateMoneyDisplay("Error");
+        moneyExpression = "";
+    }
+}
+
+function updateMoneyDisplay(val) {
+    document.getElementById('moneyDisplay').value = val || moneyExpression;
+}
+
+// Ensure your existing clock/tracker functions are still here...

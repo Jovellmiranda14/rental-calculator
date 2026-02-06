@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -13,14 +13,13 @@
   </head>
   <body>
     <div class="box">
-      <!-- NAV TABS -->
       <ul class="nav nav-tabs mb-3" role="tablist">
         <li class="nav-item" role="presentation">
           <button
             class="nav-link active"
             id="tracker-tab"
             data-bs-toggle="tab"
-            data-bs-target="#tracker"
+            data-bs-target="#tracker-container"
             type="button"
             role="tab"
           >
@@ -39,25 +38,32 @@
             🧮 Calculator
           </button>
         </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="money-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#calculator-money"
+            type="button"
+            role="tab"
+          >
+            💰 Money
+          </button>
+        </li>
       </ul>
 
       <div class="tracker-container" id="tracker-container">
         <div class="display">
           <div>📍 Philippine Time</div>
           <h4 id="currentTime">--:--</h4>
-
           <hr style="border-color: #555" />
-
           <div>⏰ End Time</div>
           <h3 id="endTime">--:--</h3>
-
           <hr style="border-color: #555" />
-
           <div>➕ Time Added</div>
           <h5 id="addedTime">0 mins</h5>
         </div>
 
-        <!-- BUTTONS -->
         <div class="buttons">
           <div class="row g-2">
             <div class="col-6">
@@ -76,9 +82,6 @@
                 +15 mins
               </button>
             </div>
-          </div>
-
-          <div class="row g-2">
             <div class="col-6">
               <button
                 class="btn btn-primary w-100 btn-time"
@@ -99,16 +102,11 @@
         </div>
       </div>
 
-      <!-- CALCULATOR TAB -->
       <div id="calculator" class="d-none calculator-container">
         <div class="display mb-3">
-          <!-- Current Philippine Time -->
           <div>📍 Philippine Time</div>
           <h4 id="currentTimeCalc">--:--</h4>
-
           <hr style="border-color: #555" />
-
-          <!-- Input for time used -->
           <div>⏳ Set Time (HH:MM AM/PM)</div>
           <input
             type="text"
@@ -116,11 +114,9 @@
             class="form-control"
             placeholder="HH:MM"
           />
-          <!-- Result -->
           <h5>Remaining Time: <span id="remainingTime">--:--</span></h5>
         </div>
 
-        <!-- Calculator Buttons -->
         <div class="row g-2 mb-2">
           <div class="col-3">
             <button class="btn btn-secondary w-100" onclick="appendNumber('7')">
@@ -143,7 +139,6 @@
             </button>
           </div>
         </div>
-
         <div class="row g-2 mb-2">
           <div class="col-3">
             <button class="btn btn-secondary w-100" onclick="appendNumber('4')">
@@ -166,7 +161,6 @@
             </button>
           </div>
         </div>
-
         <div class="row g-2 mb-2">
           <div class="col-3">
             <button class="btn btn-secondary w-100" onclick="appendNumber('1')">
@@ -192,7 +186,6 @@
             </button>
           </div>
         </div>
-
         <div class="row g-2 mb-2">
           <div class="col-6">
             <button class="btn btn-secondary w-100" onclick="appendNumber('0')">
@@ -206,19 +199,131 @@
           </div>
         </div>
       </div>
+
+      <div id="calculator-money" class="d-none calculator-container">
+        <div class="display mb-3">
+          <div
+            class="text-muted small text-end"
+            id="moneyHistory"
+            style="height: 20px"
+          ></div>
+          <h5 class="mt-2">Total Amount</h5>
+          <input
+            type="text"
+            id="moneyDisplay"
+            class="form-control text-end fs-4"
+            value="0"
+            readonly
+          />
+        </div>
+
+        <div class="row g-2 mb-2">
+          <div class="col-3">
+            <button class="btn btn-secondary w-100" onclick="moneyNum('50')">
+              50
+            </button>
+          </div>
+          <div class="col-3">
+            <button class="btn btn-secondary w-100" onclick="moneyNum('100')">
+              100
+            </button>
+          </div>
+          <div class="col-3">
+            <button class="btn btn-secondary w-100" onclick="moneyNum('150')">
+              150
+            </button>
+          </div>
+          <div class="col-3">
+            <button class="btn btn-danger w-100" onclick="moneyClear()">
+              C
+            </button>
+          </div>
+        </div>
+        <div class="row g-2 mb-2">
+          <div class="col-3">
+            <button class="btn btn-secondary w-100" onclick="moneyNum('200')">
+              200
+            </button>
+          </div>
+          <div class="col-3">
+            <button class="btn btn-secondary w-100" onclick="moneyNum('500')">
+              500
+            </button>
+          </div>
+          <div class="col-3">
+            <button class="btn btn-secondary w-100" onclick="moneyNum('1000')">
+              1k
+            </button>
+          </div>
+          <div class="col-3">
+            <button class="btn btn-warning w-100" onclick="moneyBack()">
+              ⌫
+            </button>
+          </div>
+        </div>
+        <div class="row g-2 mb-2">
+          <div class="col-3">
+            <button class="btn btn-primary w-100" onclick="moneyOp('+')">
+              +
+            </button>
+          </div>
+          <div class="col-3">
+            <button class="btn btn-primary w-100" onclick="moneyOp('-')">
+              -
+            </button>
+          </div>
+          <div class="col-3">
+            <button class="btn btn-primary w-100" onclick="moneyOp('*')">
+              ×
+            </button>
+          </div>
+          <div class="col-3">
+            <button class="btn btn-success w-100" onclick="moneyEqual()">
+              =
+            </button>
+          </div>
+        </div>
+        <div class="row g-2 mb-2">
+          <div class="col-6">
+            <button class="btn btn-secondary w-100" onclick="moneyNum('0')">
+              0
+            </button>
+          </div>
+          <div class="col-6">
+            <button class="btn btn-danger w-100" onclick="moneyClear()">
+              RESET
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- Scripts -->
     <script src="app.js"></script>
     <script>
+      // Navigation Tab Logic
+      document
+        .querySelectorAll('button[data-bs-toggle="tab"]')
+        .forEach((btn) => {
+          btn.addEventListener("click", function () {
+            document
+              .getElementById("tracker-container")
+              .classList.add("d-none");
+            document.getElementById("calculator").classList.add("d-none");
+            document.getElementById("calculator-money").classList.add("d-none");
+
+            const target = this.getAttribute("data-bs-target").replace("#", "");
+            document.getElementById(target).classList.remove("d-none");
+
+            document
+              .querySelectorAll(".nav-link")
+              .forEach((nav) => nav.classList.remove("active"));
+            this.classList.add("active");
+          });
+        });
+
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker.register("sw.js");
-
-        navigator.serviceWorker.addEventListener("controllerchange", () => {
-          window.location.reload();
-        });
       }
     </script>
-    <script src="sw.js"></script>
   </body>
 </html>
