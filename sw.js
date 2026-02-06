@@ -1,61 +1,44 @@
-const CACHE_NAME = 'rental-time-tracker-v6' + Date.now();
+const CACHE_NAME = 'rental-time-tracker-v7'; // REMOVED Date.now()
 
-// List of assets to cache for offline use
 const ASSETS = [
     './',
     './index.html',
     './app.js',
     './style.css',
-    'https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css' // Cache Bootstrap
+    'https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css'
 ];
 
-// Install event - Cache assets
+// Install event
 self.addEventListener('install', (e) => {
     e.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
-            return cache.addAll(ASSETS);  // Cache all assets on install
+            return cache.addAll(ASSETS);
         })
     );
+    self.skipWaiting(); // Force the waiting service worker to become active
 });
 
-// Activate event - Delete old caches
+// Activate event - This is where old caches are cleared
 self.addEventListener('activate', (e) => {
     e.waitUntil(
         caches.keys().then((cacheNames) => {
             return Promise.all(
                 cacheNames.map((name) => {
                     if (name !== CACHE_NAME) {
-                        return caches.delete(name); // Delete old caches that aren't the current one
+                        console.log('Clearing old cache:', name);
+                        return caches.delete(name);
                     }
                 })
             );
-        }).then(() => {
-            return self.clients.claim(); // Take control of all open clients immediately
-        })
+        }).then(() => self.clients.claim())
     );
 });
 
-// Fetch event - Serve from cache if available, otherwise fetch from the network
+// Fetch event
 self.addEventListener('fetch', (e) => {
     e.respondWith(
         caches.match(e.request).then((cachedResponse) => {
-            // If the request is in cache, return it
-            if (cachedResponse) {
-                return cachedResponse;
-            }
-
-            // If not in cache, fetch from the network
-            return fetch(e.request).then((networkResponse) => {
-                // Cache the network response directly
-                if (networkResponse && networkResponse.status === 200) {
-                    // Open the cache and store the response
-                    caches.open(CACHE_NAME).then((cache) => {
-                        cache.put(e.request, networkResponse); // Store the response in cache
-                    });
-                }
-
-                return networkResponse; // Return the network response
-            });
+            return cachedResponse || fetch(e.request);
         })
     );
 });
